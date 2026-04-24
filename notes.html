@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Notes</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+            display: inline-block;
+            margin-right: 20px;
+        }
+        #logoutBtn {
+            float: right;
+            padding: 10px 15px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #logoutBtn:hover {
+            background-color: #c82333;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #notesContainer {
+            margin-top: 20px;
+        }
+        .note {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Notes</h1>
+    <button id="logoutBtn">Logout</button> <!-- Logout Button -->
+    <textarea id="noteText" placeholder="Write your note here..."></textarea>
+    <button id="saveNoteButton">Save Note</button>
+    <div id="notesContainer"></div>
+
+    <script>
+        $(document).ready(function () {
+            // Fetch existing notes on page load
+            fetchNotes();
+
+            // Save note on button click
+            $('#saveNoteButton').click(function () {
+                var noteText = $('#noteText').val();
+                if (noteText.trim() === '') {
+                    alert('Please enter a note before saving.');
+                    return;
+                }
+                $.post('saveNote', { noteText: noteText }, function (data) {
+                    if (data.success) {
+                        alert(data.message);
+                        $('#noteText').val(''); // Clear the textarea
+                        fetchNotes(); // Refresh notes
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+            });
+
+            // Logout button functionality with AJAX call
+            $('#logoutBtn').click(function () {
+                $.get('logout', function () {
+                    window.location.href = 'index.html'; // Redirect to index page after successful logout
+                }).fail(function () {
+                    alert("Logout failed. Please try again.");
+                });
+            });
+        });
+
+        // Function to fetch notes from the server
+        function fetchNotes() {
+            $.get('getNotes', function (data) {
+                $('#notesContainer').empty(); // Clear previous notes
+                if (data.success) {
+                    // Append each note to the notes container
+                    data.notes.forEach(function (note) {
+                        $('#notesContainer').append('<div class="note">' + note.note_text + '</div>');
+                    });
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+        }
+    </script>
+</body>
+</html>
+

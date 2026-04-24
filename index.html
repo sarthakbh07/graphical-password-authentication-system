@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphical Password Authentication</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <h1>Graphical Password Authentication</h1>
+            <div id="imageGrid" class="image-grid"></div>
+            <p id="instructions">Select 3 images in order for your graphical password</p>
+        </div>
+        
+        <div class="right-section">
+            <form id="authForm">
+                <input type="text" id="username" placeholder="Username" required>
+               
+                <button type="submit" id="submitBtn">Login</button>
+            </form>
+            <button id="toggleModeBtn">Switch to Signup</button>
+        </div>
+    </div>
+    
+    <script src="js/imageSelection.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
